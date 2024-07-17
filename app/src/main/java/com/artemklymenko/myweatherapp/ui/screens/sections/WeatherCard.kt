@@ -32,7 +32,7 @@ fun WeatherCard() {
         modifier = Modifier
             .fillMaxWidth()
             .height(256.dp)
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
     ) {
