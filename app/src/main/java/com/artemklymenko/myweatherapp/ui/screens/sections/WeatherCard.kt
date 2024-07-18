@@ -13,11 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,9 +26,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.artemklymenko.myweatherapp.domain.model.WeatherModel
 
 @Composable
-fun WeatherCard() {
+fun WeatherCard(weatherModel: MutableState<WeatherModel>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,28 +50,28 @@ fun WeatherCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "12 June",
+                    text = weatherModel.value.lastUpdateTime,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 16.sp
                 )
                 AsyncImage(
                     modifier = Modifier.size(40.dp),
-                    model = "https://cdn.weatherapi.com/weather/64x64/day/113.png",
+                    model = "https:${weatherModel.value.icon}",
                     contentDescription = "Weather condition"
                 )
             }
             Text(
-                text = "London",
+                text = weatherModel.value.city,
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 32.sp
             )
             Text(
-                text = "30 *c",
+                text = "${weatherModel.value.currentTempC}°C",
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 56.sp
             )
             Text(
-                text = "sunny",
+                text = weatherModel.value.condition,
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 18.sp
             )
@@ -80,7 +82,7 @@ fun WeatherCard() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(imageVector = Icons.Outlined.Search, contentDescription = "Search city")
-                Image(imageVector = Icons.Outlined.Add, contentDescription = "")
+                Image(imageVector = Icons.Outlined.Refresh, contentDescription = "Refresh data")
             }
         }
     }
