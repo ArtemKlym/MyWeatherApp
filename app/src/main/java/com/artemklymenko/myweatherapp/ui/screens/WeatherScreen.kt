@@ -27,7 +27,9 @@ fun WeatherScreen() {
                 .fillMaxSize()
                 .padding(it)
         ) {
-            WeatherCard(currentWeatherData)
+            WeatherCard(currentWeatherData) {
+                weatherViewModel.fetchWeather("London")
+            }
             TabLayout(weatherData.value, currentWeatherData)
         }
     }
