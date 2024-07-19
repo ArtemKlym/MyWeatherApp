@@ -29,8 +29,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.artemklymenko.myweatherapp.domain.model.WeatherModel
 
+
 @Composable
-fun WeatherCard(weatherModel: MutableState<WeatherModel>, refreshData: () -> Unit) {
+fun WeatherCard(
+    weatherModel: MutableState<WeatherModel>,
+    searchCity: () -> Unit,
+    refreshData: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,7 +87,7 @@ fun WeatherCard(weatherModel: MutableState<WeatherModel>, refreshData: () -> Uni
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(onClick = {
-                    TODO("Implement search city")
+                    searchCity.invoke()
                 }) {
                     Image(imageVector = Icons.Outlined.Search, contentDescription = "Search city")
                 }
