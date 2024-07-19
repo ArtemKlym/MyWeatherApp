@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ import coil.compose.AsyncImage
 import com.artemklymenko.myweatherapp.domain.model.WeatherModel
 
 @Composable
-fun WeatherCard(weatherModel: MutableState<WeatherModel>) {
+fun WeatherCard(weatherModel: MutableState<WeatherModel>, refreshData: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,8 +82,16 @@ fun WeatherCard(weatherModel: MutableState<WeatherModel>) {
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(imageVector = Icons.Outlined.Search, contentDescription = "Search city")
-                Image(imageVector = Icons.Outlined.Refresh, contentDescription = "Refresh data")
+                IconButton(onClick = {
+                    TODO("Implement search city")
+                }) {
+                    Image(imageVector = Icons.Outlined.Search, contentDescription = "Search city")
+                }
+                IconButton(onClick = {
+                    refreshData.invoke()
+                }) {
+                    Image(imageVector = Icons.Outlined.Refresh, contentDescription = "Refresh data")
+                }
             }
         }
     }
