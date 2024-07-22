@@ -19,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,7 +31,7 @@ import com.artemklymenko.myweatherapp.domain.model.WeatherModel
 
 @Composable
 fun WeatherCard(
-    weatherModel: MutableState<WeatherModel>,
+    weatherModel: WeatherModel,
     searchCity: () -> Unit,
     refreshData: () -> Unit) {
     Box(
@@ -55,28 +54,28 @@ fun WeatherCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = weatherModel.value.lastUpdateTime,
+                    text = weatherModel.lastUpdateTime,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 16.sp
                 )
                 AsyncImage(
                     modifier = Modifier.size(40.dp),
-                    model = "https:${weatherModel.value.icon}",
+                    model = "https:${weatherModel.icon}",
                     contentDescription = "Weather condition"
                 )
             }
             Text(
-                text = weatherModel.value.city,
+                text = weatherModel.city,
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 32.sp
             )
             Text(
-                text = "${weatherModel.value.currentTempC}°C",
+                text = "${weatherModel.currentTempC}°C",
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 56.sp
             )
             Text(
-                text = weatherModel.value.condition,
+                text = weatherModel.condition,
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 18.sp
             )
