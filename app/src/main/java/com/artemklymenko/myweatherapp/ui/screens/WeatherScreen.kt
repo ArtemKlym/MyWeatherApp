@@ -1,17 +1,21 @@
 package com.artemklymenko.myweatherapp.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,44 +32,55 @@ fun WeatherScreen() {
     val weatherViewModel: WeatherViewModel = hiltViewModel()
     val weatherData = remember { weatherViewModel.allWeatherData }
     val currentWeatherData = remember { weatherViewModel.currentWeatherData }
-    weatherViewModel.fetchWeather("London")
+
+    LaunchedEffect(Unit) {
+        weatherViewModel.fetchWeather("London")
+    }
     Scaffold {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
-            WeatherCard(
-                currentWeatherData,
-                searchCity = {
-                    showDialog = true
-                },
-                refreshData = {
+        if (weatherData.value.isEmpty() || currentWeatherData.value == null) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                WeatherCard(
+                    currentWeatherData.value!!,
+                    searchCity = {
+                        showDialog = true
+                    }
+                ) {
                     weatherViewModel.fetchWeather("London")
                 }
-            )
-            TabLayout(weatherData.value, currentWeatherData)
-        }
-        if (showDialog) {
-            MyAlertDialog(
-                title = "Search city",
-                content = {
-                    OutlinedTextField(
-                        value = city,
-                        onValueChange = { text ->
-                            city = text
-                        },
-                        placeholder = {
-                            Text(text = "London")
-                        }
-                    )
-                },
-                onCancel = { showDialog = false },
-                onConfirm = {
-                    showDialog = false
-                    weatherViewModel.fetchWeather(city)
-                }
-            )
+                TabLayout(weatherData.value, currentWeatherData.value!!)
+            }
+            if (showDialog) {
+                MyAlertDialog(
+                    title = "Search city",
+                    content = {
+                        OutlinedTextField(
+                            value = city,
+                            onValueChange = { text ->
+                                city = text
+                            },
+                            placeholder = {
+                                Text(text = "London")
+                            }
+                        )
+                    },
+                    onCancel = { showDialog = false },
+                    onConfirm = {
+                        showDialog = false
+                        weatherViewModel.fetchWeather(city)
+                    }
+                )
+            }
         }
     }
 }
