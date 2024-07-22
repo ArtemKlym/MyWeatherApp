@@ -1,5 +1,6 @@
 package com.artemklymenko.myweatherapp.ui.screens
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,12 +17,12 @@ class WeatherViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _allWeatherData = mutableStateOf<List<WeatherModel>>(emptyList())
-    val allWeatherData  = _allWeatherData
+    val allWeatherData: State<List<WeatherModel>> get()  = _allWeatherData
 
     private val _currentWeatherData = mutableStateOf(
         WeatherModel("","","","","","","","")
     )
-    val currentWeatherData  = _currentWeatherData
+    val currentWeatherData: State<WeatherModel?> get()  = _currentWeatherData
 
     fun fetchWeather(city: String) {
         viewModelScope.launch(Dispatchers.IO) {
