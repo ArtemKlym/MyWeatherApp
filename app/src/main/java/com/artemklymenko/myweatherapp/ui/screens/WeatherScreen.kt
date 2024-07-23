@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +23,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.artemklymenko.myweatherapp.ui.screens.sections.TabLayout
 import com.artemklymenko.myweatherapp.ui.screens.sections.WeatherCard
 import com.artemklymenko.utils.MyAlertDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
@@ -32,9 +37,13 @@ fun WeatherScreen() {
     val weatherViewModel: WeatherViewModel = hiltViewModel()
     val weatherData = remember { weatherViewModel.allWeatherData }
     val currentWeatherData = remember { weatherViewModel.currentWeatherData }
+    val cityViewModel: CityViewModel = hiltViewModel()
+    val dataStore by cityViewModel.city.collectAsState(initial = null)
 
-    LaunchedEffect(Unit) {
-        weatherViewModel.fetchWeather("London")
+    LaunchedEffect(dataStore) {
+        val cityToFetch = dataStore ?: "London"
+        delay(500)
+        weatherViewModel.fetchWeather(cityToFetch)
     }
     Scaffold {
         if (weatherData.value.isEmpty() || currentWeatherData.value == null) {
@@ -56,7 +65,9 @@ fun WeatherScreen() {
                         showDialog = true
                     }
                 ) {
-                    weatherViewModel.fetchWeather("London")
+                    dataStore?.let { nonNullDataStore ->
+                        weatherViewModel.fetchWeather(nonNullDataStore)
+                    }
                 }
                 TabLayout(weatherData.value, currentWeatherData.value!!)
             }
@@ -76,6 +87,9 @@ fun WeatherScreen() {
                     },
                     onCancel = { showDialog = false },
                     onConfirm = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cityViewModel.saveCity(city)
+                        }
                         showDialog = false
                         weatherViewModel.fetchWeather(city)
                     }
