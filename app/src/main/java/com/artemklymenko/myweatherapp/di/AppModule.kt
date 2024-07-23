@@ -2,6 +2,7 @@ package com.artemklymenko.myweatherapp.di
 
 import android.content.Context
 import com.artemklymenko.myweatherapp.data.WeatherRepositoryImpl
+import com.artemklymenko.myweatherapp.datastore.StoreUserCity
 import com.artemklymenko.myweatherapp.domain.WeatherRepository
 import dagger.Module
 import dagger.Provides
@@ -20,5 +21,13 @@ object AppModule {
         @ApplicationContext context: Context
     ): WeatherRepository {
         return WeatherRepositoryImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStoreUserCity(
+        @ApplicationContext context: Context
+    ): StoreUserCity {
+        return StoreUserCity(context)
     }
 }
