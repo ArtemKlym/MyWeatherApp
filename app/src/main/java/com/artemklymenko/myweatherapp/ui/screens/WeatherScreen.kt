@@ -42,7 +42,7 @@ fun WeatherScreen() {
 
     LaunchedEffect(dataStore) {
         val cityToFetch = dataStore ?: "London"
-        delay(500)
+        delay(1000)
         weatherViewModel.fetchWeather(cityToFetch)
     }
     Scaffold {
@@ -65,6 +65,7 @@ fun WeatherScreen() {
                         showDialog = true
                     }
                 ) {
+
                     dataStore?.let { nonNullDataStore ->
                         weatherViewModel.fetchWeather(nonNullDataStore)
                     }
