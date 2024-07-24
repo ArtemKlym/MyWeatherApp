@@ -16,7 +16,7 @@ The app fetches and displays weather information for a user-specified city, prov
 ## Installation
 ### 1. Clone the repository:
 ```
-[git clone https://github.com/your-username/myweatherapp.git](https://github.com/ArtemKlym/MyWeatherApp.git)
+git clone https://github.com/ArtemKlym/MyWeatherApp.git
 cd myweatherapp
 ```
 ### 2. Open the project in Android Studio.
